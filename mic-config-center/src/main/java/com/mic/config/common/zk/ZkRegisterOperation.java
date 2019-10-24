@@ -1,12 +1,15 @@
 package com.mic.config.common.zk;
 
 import com.google.common.base.Charsets;
-import com.mic.config.common.context.MicZkConfigProperties;
+import com.mic.config.common.properties.MicZkConfigProperties;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.state.ConnectionState;
+import org.apache.curator.framework.state.ConnectionStateListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.KeeperException;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,6 +30,7 @@ public class ZkRegisterOperation implements ZkOperation {
                     zkRegisterOperation = new ZkRegisterOperation();
                     zkRegisterOperation.cf = CuratorFrameworkFactory.builder()
                             .connectString(config.getAddressList())
+                            .namespace(config.getNamespace())
                             .sessionTimeoutMs(config.getSessionTimeoutMilliseconds())
                             .connectionTimeoutMs(config.getConnectionTimeoutMilliseconds())
                             .retryPolicy(new ExponentialBackoffRetry
@@ -39,12 +43,21 @@ public class ZkRegisterOperation implements ZkOperation {
             }
         }
         zkRegisterOperation.cf.start();
+        CountDownLatch countDownLatch = new CountDownLatch(1);
+        zkRegisterOperation.cf.getConnectionStateListenable().addListener(new ConnectionStateListener() {
+            @Override
+            public void stateChanged(CuratorFramework client, ConnectionState newState) {
+                if (newState.isConnected()) {
+                    countDownLatch.countDown();
+                }
+            }
+        });
         try {
             if (!zkRegisterOperation.cf.blockUntilConnected(config.getMaxSleepTimeMilliseconds() * config.getMaxRetries(), TimeUnit.MILLISECONDS)) {
                 zkRegisterOperation.cf.close();
                 throw new KeeperException.OperationTimeoutException();
             }
-
+            countDownLatch.await(10, TimeUnit.SECONDS);
         } catch (final Exception e) {
             e.printStackTrace();
         }
@@ -60,7 +73,7 @@ public class ZkRegisterOperation implements ZkOperation {
     public String getData(String path) {
         String data;
         try {
-            data = new String(cf.getData().forPath("path"), Charsets.UTF_8);
+            data = new String(cf.getData().forPath(path), Charsets.UTF_8);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

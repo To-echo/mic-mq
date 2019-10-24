@@ -2,7 +2,7 @@ package com.mic.config.common.config;
 
 import com.mic.config.common.utils.ClassUtils;
 import com.mic.config.common.context.MicConfigLocator;
-import com.mic.config.common.context.MicZkConfigProperties;
+import com.mic.config.common.properties.MicZkConfigProperties;
 import com.mic.config.common.zk.ZkRegisterOperation;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.bind.PropertySourcesPropertyValues;
@@ -37,8 +37,7 @@ public class RegisterPropertyConfiguration implements ApplicationContextInitiali
     @Override
     public void initialize(ConfigurableApplicationContext applicationContext) {
         ConfigurableEnvironment environment = applicationContext.getEnvironment();
-        initDependence(environment);
-        ZkRegisterOperation.init(properties);
+        loadDependence(environment);
         MutablePropertySources mutablePropertySources = environment.getPropertySources();
         CompositePropertySource composite = new CompositePropertySource(BOOTSTRAP_NAME);
         micConfigLocators.forEach(e -> {
@@ -56,11 +55,33 @@ public class RegisterPropertyConfiguration implements ApplicationContextInitiali
         return 0;
     }
 
-    private void initDependence(ConfigurableEnvironment environment) {
+    /**
+     * 加载所有依赖项入口
+     *
+     * @param environment
+     */
+    private void loadDependence(ConfigurableEnvironment environment) {
         initZkProperties(environment);
+
         if (properties.isEnable()) {
+            //加载所有 MicConfigLocator
             setMicConfigLocator(ClassUtils.getClassCollection(MicConfigLocator.class));
         }
+    }
+
+    /**
+     * 初始化配置中心zk
+     *
+     * @param environment
+     */
+    private void initZkProperties(ConfigurableEnvironment environment) {
+        //RelaxedPropertyResolver
+        MicZkConfigProperties properties = new MicZkConfigProperties();
+        RelaxedDataBinder binder = new RelaxedDataBinder(properties, ZK_PREFIX);
+        binder.bind(new PropertySourcesPropertyValues(environment.getPropertySources()));
+//        RelaxedPropertyResolver relaxedPropertyResolver = new RelaxedPropertyResolver(environment,"mic.zk.");
+        this.properties = properties;
+        ZkRegisterOperation.init(properties);
     }
 
     public void setMicConfigLocator(
@@ -69,12 +90,20 @@ public class RegisterPropertyConfiguration implements ApplicationContextInitiali
         this.micConfigLocators.addAll(initializers);
     }
 
-    private void initZkProperties(ConfigurableEnvironment environment) {
-        //RelaxedPropertyResolver
-        MicZkConfigProperties properties = new MicZkConfigProperties();
-        RelaxedDataBinder binder = new RelaxedDataBinder(properties, ZK_PREFIX);
-        binder.bind(new PropertySourcesPropertyValues(environment.getPropertySources()));
-//        RelaxedPropertyResolver relaxedPropertyResolver = new RelaxedPropertyResolver(environment,"mic.zk.");
-        this.properties = properties;
+    public static String getBootstrapName() {
+        return BOOTSTRAP_NAME;
+    }
+
+    public static String getZkPrefix() {
+        return ZK_PREFIX;
+    }
+
+    public MicZkConfigProperties getProperties() {
+        return properties;
+    }
+
+
+    public List<MicConfigLocator> getMicConfigLocators() {
+        return micConfigLocators;
     }
 }
