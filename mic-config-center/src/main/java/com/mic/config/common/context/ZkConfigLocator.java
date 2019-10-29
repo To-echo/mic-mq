@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 尋找 param1=xxx1;param1=xxx1 键值对
+ *
  * @author tianp
  **/
 public class ZkConfigLocator implements MicConfigLocator {

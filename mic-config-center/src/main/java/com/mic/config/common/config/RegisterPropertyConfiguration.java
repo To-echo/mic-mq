@@ -1,5 +1,6 @@
 package com.mic.config.common.config;
 
+import com.mic.config.common.context.ZkConfigLocator;
 import com.mic.config.common.utils.ClassUtils;
 import com.mic.config.common.context.MicConfigLocator;
 import com.mic.config.common.properties.MicZkConfigProperties;
@@ -10,6 +11,7 @@ import org.springframework.boot.bind.RelaxedDataBinder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.CompositePropertySource;
@@ -29,8 +31,8 @@ import java.util.List;
 @ConditionalOnProperty(value = "mic.zk.enable", havingValue = "true")
 public class RegisterPropertyConfiguration implements ApplicationContextInitializer<ConfigurableApplicationContext>, Ordered {
 
-    private static final String BOOTSTRAP_NAME = "bootstrap";
-    private static final String ZK_PREFIX = "mic.zk.";
+    public static final String BOOTSTRAP_NAME = "bootstrap";
+    public static final String ZK_PREFIX = "mic.zk.";
     private MicZkConfigProperties properties;
     private List<MicConfigLocator> micConfigLocators;
 
@@ -52,7 +54,7 @@ public class RegisterPropertyConfiguration implements ApplicationContextInitiali
 
     @Override
     public int getOrder() {
-        return 0;
+        return Ordered.HIGHEST_PRECEDENCE;
     }
 
     /**
@@ -64,8 +66,10 @@ public class RegisterPropertyConfiguration implements ApplicationContextInitiali
         initZkProperties(environment);
 
         if (properties.isEnable()) {
+            Collection<MicConfigLocator> classCollection = ClassUtils.getClassCollection(MicConfigLocator.class);
+            classCollection.add(micConfigLocator());
             //加载所有 MicConfigLocator
-            setMicConfigLocator(ClassUtils.getClassCollection(MicConfigLocator.class));
+            setMicConfigLocator(classCollection);
         }
     }
 
@@ -90,20 +94,8 @@ public class RegisterPropertyConfiguration implements ApplicationContextInitiali
         this.micConfigLocators.addAll(initializers);
     }
 
-    public static String getBootstrapName() {
-        return BOOTSTRAP_NAME;
-    }
-
-    public static String getZkPrefix() {
-        return ZK_PREFIX;
-    }
-
-    public MicZkConfigProperties getProperties() {
-        return properties;
-    }
-
-
-    public List<MicConfigLocator> getMicConfigLocators() {
-        return micConfigLocators;
+    @Bean
+    public MicConfigLocator micConfigLocator() {
+        return new ZkConfigLocator();
     }
 }
