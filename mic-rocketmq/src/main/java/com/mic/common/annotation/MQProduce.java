@@ -1,5 +1,6 @@
 package com.mic.common.annotation;
 
+import com.mic.common.constans.MessageTypeEnum;
 import com.mic.common.constans.SendTypeEnum;
 
 import java.lang.annotation.*;
@@ -12,10 +13,11 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface MQProducer {
-    String topic() default "";
+public @interface MQProduce {
 
     String group() default "";
 
-    SendTypeEnum sendType() default SendTypeEnum.DIRECT;
+    MessageTypeEnum type();
+
+    SendTypeEnum send() default SendTypeEnum.DIRECT;
 }

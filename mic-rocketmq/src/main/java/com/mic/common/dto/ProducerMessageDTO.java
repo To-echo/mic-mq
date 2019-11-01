@@ -13,6 +13,10 @@ public class ProducerMessageDTO {
 
     private String topic;
 
+    private String tag;
+
+    private String key;
+
     private String group;
 
     private Integer sendType;
@@ -62,15 +66,22 @@ public class ProducerMessageDTO {
         this.group = group;
     }
 
-    @Override
-    public String toString() {
-        return "ProducerMessageDTO{" +
-                "topic='" + topic + '\'' +
-                ", group='" + group + '\'' +
-                ", sendType=" + sendType +
-                ", body='" + body + '\'' +
-                '}';
+    public String getTag() {
+        return tag;
     }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public static ProducerMessageDTO init(String body){
         ProducerMessageDTO dto =  new ProducerMessageDTO();
         dto.setBody(body);

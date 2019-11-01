@@ -1,13 +1,10 @@
 package com.mic.service;
 
-import com.mic.common.annotation.MQProducer;
+import com.mic.common.annotation.MQProduce;
+import com.mic.common.constans.MessageTypeEnum;
+import com.mic.common.constans.ProducerGroupDict;
 import com.mic.common.dto.ProducerMessageDTO;
-import com.mic.common.service.RocketMqProducerService;
-import com.mic.common.factory.MQProducerFactory;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.springframework.stereotype.Service;
-
-import java.util.Objects;
 
 /**
  * @author tianp
@@ -15,7 +12,7 @@ import java.util.Objects;
 @Service
 public class SmsManageService {
 
-    @MQProducer(group = "producer-send",topic = "topic-test")
+    @MQProduce(group = ProducerGroupDict.TEST, type = MessageTypeEnum.USER_LOGIN)
     public void sendSms(ProducerMessageDTO dto) {
     }
 }

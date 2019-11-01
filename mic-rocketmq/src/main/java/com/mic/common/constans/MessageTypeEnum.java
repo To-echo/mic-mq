@@ -1,15 +1,16 @@
 package com.mic.common.constans;
 
 public enum MessageTypeEnum {
-    PRODUCER(10, "生产者"),
-    CONSUMER(20, "消费者")
-    ;
+    USER_LOGIN(100,TopicDict.LOGIN, "用户登录，新增积分"),
+    CHECK_IN(101, TopicDict.CHECK_IN,"用户签到，新增积分");
     private int messageType;
-    private String value;
+    private String topic;
+    private String desc;
 
-    MessageTypeEnum(int messageType, String value) {
+    MessageTypeEnum(int messageType,String topic, String desc) {
         this.messageType = messageType;
-        this.value = value;
+        this.topic = topic;
+        this.desc = desc;
     }
 
     public int getMessageType() {
@@ -20,11 +21,19 @@ public enum MessageTypeEnum {
         this.messageType = messageType;
     }
 
-    public String getValue() {
-        return value;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 }

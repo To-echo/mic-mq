@@ -4,8 +4,8 @@ package com.mic.common.constans;
  * @author tianp
  **/
 public enum SendTypeEnum {
-    DIRECT(1, "直接发送")
-//    CONFIRM(2, "等待确认")
+    DIRECT(10, "直接发送"),
+    CONFIRM(11, "等待确认")
     ;
 
     private int code;

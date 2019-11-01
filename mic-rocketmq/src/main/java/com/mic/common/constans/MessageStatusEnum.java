@@ -3,10 +3,9 @@ package com.mic.common.constans;
 /**
  * @author tianp
  **/
-
 public enum MessageStatusEnum {
-    WAIT_SEND(30, "待确认"),
-    HAS_SEND(31, "已发送");
+    WAIT_SEND(21, "prepare"),
+    HAS_SEND(31, "commit");
 
     private int code;
     private String desc;
