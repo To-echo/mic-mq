@@ -15,7 +15,7 @@ public class RocketMqProducerService {
 
     public void send(ProducerMessageDTO dto) {
         try {
-            DefaultMQProducer defaultMQProducer = MQProducerFactory.get(dto.getGroup());
+            DefaultMQProducer defaultMQProducer = MQProducerFactory.get(dto.getPubGroup());
             if (Objects.isNull(defaultMQProducer)) {
                 System.out.println("defaultMQProducer is null");
                 return;

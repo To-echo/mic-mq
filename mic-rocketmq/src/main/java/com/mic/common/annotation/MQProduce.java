@@ -1,7 +1,7 @@
 package com.mic.common.annotation;
 
-import com.mic.common.constans.MessageTypeEnum;
-import com.mic.common.constans.SendTypeEnum;
+import com.mic.common.mq.MessageTypeEnum;
+import com.mic.common.mq.SendTypeEnum;
 
 import java.lang.annotation.*;
 

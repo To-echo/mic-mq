@@ -1,4 +1,4 @@
-package com.mic.common.constans;
+package com.mic.common.mq;
 
 /**
  * 生产者组字典

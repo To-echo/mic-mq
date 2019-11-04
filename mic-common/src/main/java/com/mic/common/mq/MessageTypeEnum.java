@@ -1,4 +1,4 @@
-package com.mic.common.constans;
+package com.mic.common.mq;
 
 public enum MessageTypeEnum {
     USER_LOGIN(100,TopicDict.LOGIN, "用户登录，新增积分"),

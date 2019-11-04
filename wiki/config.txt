@@ -1,0 +1,10 @@
+rocket.mq.name-srv=192.168.248.129:9876;
+rocket.mq.producers[0].producer-group=producer-send;
+rocket.mq.producers[0].send-msg-timeout=3000;
+rocket.mq.producers[0].retry-times-when-send-failed=2;
+rocket.mq.producers[0].consumer-group=consume-send;
+spring.datasource.url=jdbc:mysql://localhost:3306/mq_transfer?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC;
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver;
+spring.datasource.username=root;
+spring.datasource.password=123456;
+mybatis.mapper-locations=classpath:mapping/*Mapper.xml;

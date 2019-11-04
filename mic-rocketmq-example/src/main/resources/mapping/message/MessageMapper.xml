@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mic.mapper.MessageMapper">
+
+    <resultMap id="BaseResultMap" type="com.mic.entity.PublishMessageEntity">
+        <result column="id" jdbcType="INTEGER" property="id"/>
+        <result column="topic" jdbcType="VARCHAR" property="topic"/>
+        <result column="pub_key" jdbcType="VARCHAR" property="pubKey"/>
+        <result column="tag" jdbcType="VARCHAR" property="tag"/>
+        <result column="body" jdbcType="VARCHAR" property="body"/>
+        <result column="pub_group" jdbcType="VARCHAR" property="pubGroup"/>
+        <result column="stage" jdbcType="INTEGER" property="stage"/>
+        <result column="cts" jdbcType="DATE" property="createTime"/>
+        <result column="uts" jdbcType="DATE" property="updateTime"/>
+    </resultMap>
+
+</mapper>

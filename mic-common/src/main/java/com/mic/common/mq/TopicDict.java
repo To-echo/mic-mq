@@ -1,4 +1,4 @@
-package com.mic.common.constans;
+package com.mic.common.mq;
 
 /**
  * topic 字典，通过系统名字加下划线再加topic 编码构成

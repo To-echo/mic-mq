@@ -10,14 +10,15 @@ import java.util.Random;
  * @author tianp
  **/
 public class ProducerMessageDTO {
+    private Object id;
 
     private String topic;
 
     private String tag;
 
-    private String key;
+    private String pubKey;
 
-    private String group;
+    private String pubGroup;
 
     private Integer sendType;
 
@@ -44,9 +45,9 @@ public class ProducerMessageDTO {
         Random r = new Random();
         Message message = new Message();
         message.setBody(body.getBytes(RemotingHelper.DEFAULT_CHARSET));
-        message.setTags("A");
+        message.setTags(this.tag);
         message.setTopic(this.topic);
-        message.setKeys(body + r.nextInt(100));
+        message.setKeys(this.pubKey);
         return message;
     }
 
@@ -58,14 +59,6 @@ public class ProducerMessageDTO {
         this.topic = topic;
     }
 
-    public String getGroup() {
-        return group;
-    }
-
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
     public String getTag() {
         return tag;
     }
@@ -74,17 +67,40 @@ public class ProducerMessageDTO {
         this.tag = tag;
     }
 
-    public String getKey() {
-        return key;
+    public String getPubKey() {
+        return pubKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setPubKey(String pubKey) {
+        this.pubKey = pubKey;
     }
 
-    public static ProducerMessageDTO init(String body){
-        ProducerMessageDTO dto =  new ProducerMessageDTO();
-        dto.setBody(body);
-        return dto;
+    public String getPubGroup() {
+        return pubGroup;
+    }
+
+    public void setPubGroup(String pubGroup) {
+        this.pubGroup = pubGroup;
+    }
+
+    public Object getId() {
+        return id;
+    }
+
+    public void setId(Object id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "ProducerMessageDTO{" +
+                "id=" + id +
+                ", topic='" + topic + '\'' +
+                ", tag='" + tag + '\'' +
+                ", pubKey='" + pubKey + '\'' +
+                ", pubGroup='" + pubGroup + '\'' +
+                ", sendType=" + sendType +
+                ", body='" + body + '\'' +
+                '}';
     }
 }

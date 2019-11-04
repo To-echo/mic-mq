@@ -1,9 +1,10 @@
 package com.mic.service;
 
 import com.mic.common.annotation.MQProduce;
-import com.mic.common.constans.MessageTypeEnum;
-import com.mic.common.constans.ProducerGroupDict;
+import com.mic.common.mq.MessageTypeEnum;
+import com.mic.common.mq.ProducerGroupDict;
 import com.mic.common.dto.ProducerMessageDTO;
+import com.mic.common.mq.SendTypeEnum;
 import org.springframework.stereotype.Service;
 
 /**
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SmsManageService {
 
-    @MQProduce(group = ProducerGroupDict.TEST, type = MessageTypeEnum.USER_LOGIN)
+    @MQProduce(group = ProducerGroupDict.TEST, type = MessageTypeEnum.USER_LOGIN, send = SendTypeEnum.CONFIRM)
     public void sendSms(ProducerMessageDTO dto) {
+        throw new RuntimeException();
     }
 }

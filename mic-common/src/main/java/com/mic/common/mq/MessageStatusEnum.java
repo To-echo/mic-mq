@@ -1,11 +1,12 @@
-package com.mic.common.constans;
+package com.mic.common.mq;
 
 /**
  * @author tianp
  **/
 public enum MessageStatusEnum {
     WAIT_SEND(21, "prepare"),
-    HAS_SEND(31, "commit");
+    HAS_SEND(22, "commit"),
+    ROLLBACK(23, "rollback");
 
     private int code;
     private String desc;
