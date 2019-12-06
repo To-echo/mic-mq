@@ -13,6 +13,7 @@
         <module>mic-rocketmq-example</module>
         <module>mic-config-center</module>
         <module>mic-common</module>
+        <module>mic-config-center-example</module>
     </modules>
 
     <dependencyManagement>

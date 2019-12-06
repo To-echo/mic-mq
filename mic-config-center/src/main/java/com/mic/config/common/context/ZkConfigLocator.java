@@ -21,6 +21,7 @@ public class ZkConfigLocator implements MicConfigLocator {
     public PropertySource<?> locate(Environment environment) {
         ZkRegisterOperation instance = ZkRegisterOperation.getInstance();
         String data = instance.getData(environment.getProperty(DATA_PREFIX));
+        //TODO data 可能为 null
         Map<String, Object> source = new HashMap<>();
         String[] split = data.split(";");
         for (String var0 : split) {

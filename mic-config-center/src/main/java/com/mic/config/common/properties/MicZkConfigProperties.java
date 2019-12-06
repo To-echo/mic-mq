@@ -50,6 +50,8 @@ public class MicZkConfigProperties {
      */
     private String namespace = "/";
 
+    private String data;
+
     public String getAddressList() {
         return addressList;
     }
@@ -114,6 +116,14 @@ public class MicZkConfigProperties {
         this.namespace = namespace;
     }
 
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
     @Override
     public String toString() {
         return "MicZkConfigProperties{" +
@@ -125,6 +135,8 @@ public class MicZkConfigProperties {
                 ", connectionTimeoutMilliseconds=" + connectionTimeoutMilliseconds +
                 ", sessionTimeoutMilliseconds=" + sessionTimeoutMilliseconds +
                 ", namespace='" + namespace + '\'' +
+                ", data='" + data + '\'' +
+
                 '}';
     }
 }

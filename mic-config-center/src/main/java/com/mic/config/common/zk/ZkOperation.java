@@ -1,5 +1,7 @@
 package com.mic.config.common.zk;
 
+import com.mic.config.common.event.Processor;
+
 /**
  * @author tianp
  **/
@@ -18,4 +20,11 @@ public interface ZkOperation {
      * @return 值
      */
     String[] getDataForeach(String path);
+
+    /**
+     * 注册 watch 监听
+     * @param path
+     * @return
+     */
+    boolean registerWatcher(String path, Processor processor);
 }

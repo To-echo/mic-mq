@@ -1,9 +1,12 @@
 package com.mic.config.common.zk;
 
 import com.google.common.base.Charsets;
+import com.mic.config.common.event.Processor;
 import com.mic.config.common.properties.MicZkConfigProperties;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.recipes.cache.NodeCache;
+import org.apache.curator.framework.recipes.cache.NodeCacheListener;
 import org.apache.curator.framework.state.ConnectionState;
 import org.apache.curator.framework.state.ConnectionStateListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
@@ -30,7 +33,6 @@ public class ZkRegisterOperation implements ZkOperation {
                     zkRegisterOperation = new ZkRegisterOperation();
                     zkRegisterOperation.cf = CuratorFrameworkFactory.builder()
                             .connectString(config.getAddressList())
-                            .namespace(config.getNamespace())
                             .sessionTimeoutMs(config.getSessionTimeoutMilliseconds())
                             .connectionTimeoutMs(config.getConnectionTimeoutMilliseconds())
                             .retryPolicy(new ExponentialBackoffRetry
@@ -84,5 +86,22 @@ public class ZkRegisterOperation implements ZkOperation {
     @Override
     public String[] getDataForeach(String path) {
         return new String[0];
+    }
+
+    @Override
+    public boolean registerWatcher(String path, Processor processor) {
+        NodeCache nodeCache = new NodeCache(cf, path, false);
+        try {
+            nodeCache.start(true);
+            nodeCache.getListenable().addListener(new NodeCacheListener() {
+                @Override
+                public void nodeChanged() throws Exception {
+                    processor.process(nodeCache);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 }
