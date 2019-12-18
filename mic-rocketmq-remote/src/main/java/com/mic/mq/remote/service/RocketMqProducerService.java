@@ -1,8 +1,9 @@
-package com.mic.common.service;
+package com.mic.mq.remote.service;
 
 import com.mic.common.dto.ProducerMessageDTO;
-import com.mic.common.factory.MQProducerFactory;
+import com.mic.mq.remote.factory.MQProducerFactory;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -17,10 +18,12 @@ public class RocketMqProducerService {
         try {
             DefaultMQProducer defaultMQProducer = MQProducerFactory.get(dto.getPubGroup());
             if (Objects.isNull(defaultMQProducer)) {
-                System.out.println("defaultMQProducer is null");
                 return;
             }
-            defaultMQProducer.send(dto.transferTo());
+            Message message = new Message();
+            message.setTopic(dto.getTopic());
+            //。。
+            defaultMQProducer.send(message);
         } catch (Exception e) {
             e.printStackTrace();
         }

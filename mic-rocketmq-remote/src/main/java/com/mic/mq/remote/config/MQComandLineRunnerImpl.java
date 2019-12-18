@@ -1,11 +1,9 @@
-package com.mic.common.config;
+package com.mic.mq.remote.config;
 
-import com.mic.common.factory.MQProducerFactory;
-import com.mic.common.properties.MQProperties;
+import com.mic.mq.remote.factory.MQProducerFactory;
+import com.mic.mq.remote.properties.MQProperties;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;

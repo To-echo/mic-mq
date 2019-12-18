@@ -1,3 +1,4 @@
+/*
 package com.mic.service.mq;
 
 import com.mic.common.handler.TransactionHandler;
@@ -10,11 +11,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+*/
 /**
  * @author tianp
- **/
+ **//*
+
 @Component
-public class TransactionMessageHandler implements TransactionHandler {
+public class TransactionMessageHandler implements TransactionMessageHandler {
     @Autowired
     private MessageMapper messageMapper;
 
@@ -39,3 +42,4 @@ public class TransactionMessageHandler implements TransactionHandler {
         messageMapper.update((Integer) dto.getId(), MessageStatusEnum.ROLLBACK.getCode());
     }
 }
+*/

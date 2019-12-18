@@ -6,7 +6,14 @@ import com.mic.common.dto.ProducerMessageDTO;
 /**
  * @author tianp
  **/
-public interface TransactionHandler {
+public interface MQMessageHandler {
+    /**
+     * 直接提交
+     *
+     * @param dto
+     */
+    void directSend(ProducerMessageDTO dto);
+
     /**
      * 1.预提交
      *
@@ -18,10 +25,10 @@ public interface TransactionHandler {
     /**
      * 2.提交
      *
-     * @param identity 标识
+     * @param dto 标识
      * @return
      */
-    boolean commit(Object identity);
+    void commit(ProducerMessageDTO dto);
 
     /**
      * 回滚

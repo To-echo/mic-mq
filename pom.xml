@@ -9,11 +9,12 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>mic-rocketmq</module>
+        <module>mic-rocketmq-client</module>
         <module>mic-rocketmq-example</module>
         <module>mic-config-center</module>
         <module>mic-common</module>
         <module>mic-config-center-example</module>
+        <module>mic-rocketmq-remote</module>
     </modules>
 
     <dependencyManagement>

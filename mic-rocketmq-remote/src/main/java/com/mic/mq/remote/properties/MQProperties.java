@@ -1,4 +1,4 @@
-package com.mic.common.properties;
+package com.mic.mq.remote.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

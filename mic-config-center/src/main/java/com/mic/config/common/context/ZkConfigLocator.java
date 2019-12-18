@@ -4,6 +4,7 @@ import com.mic.config.common.zk.ZkRegisterOperation;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
+import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +22,9 @@ public class ZkConfigLocator implements MicConfigLocator {
     public PropertySource<?> locate(Environment environment) {
         ZkRegisterOperation instance = ZkRegisterOperation.getInstance();
         String data = instance.getData(environment.getProperty(DATA_PREFIX));
+        if (StringUtils.isEmpty(data)){
+            return null;
+        }
         //TODO data 可能为 null
         Map<String, Object> source = new HashMap<>();
         String[] split = data.split(";");

@@ -13,7 +13,7 @@
     <dependencies>
         <dependency>
             <groupId>com.example</groupId>
-            <artifactId>mic-rocketmq</artifactId>
+            <artifactId>mic-rocketmq-client</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>

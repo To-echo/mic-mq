@@ -1,32 +1,22 @@
 package com.mic.config.common.config;
 
-import com.mic.config.common.context.ZkConfigLocator;
-import com.mic.config.common.event.Processor;
-import com.mic.config.common.utils.ClassUtils;
 import com.mic.config.common.context.MicConfigLocator;
+import com.mic.config.common.context.ZkConfigLocator;
 import com.mic.config.common.properties.MicZkConfigProperties;
+import com.mic.config.common.utils.ClassUtils;
 import com.mic.config.common.zk.ZkRegisterOperation;
-import org.apache.curator.framework.recipes.cache.NodeCache;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.bind.PropertySourcesPropertyValues;
 import org.springframework.boot.bind.RelaxedDataBinder;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.ContextStartedEvent;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.CompositePropertySource;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;

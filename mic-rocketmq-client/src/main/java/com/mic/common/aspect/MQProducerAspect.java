@@ -2,11 +2,10 @@ package com.mic.common.aspect;
 
 import com.mic.common.annotation.MQProduce;
 import com.mic.common.bean.ResponseVO;
-import com.mic.common.handler.TransactionHandler;
+import com.mic.common.dto.ProducerMessageDTO;
+import com.mic.common.handler.GenericMessageHandler;
 import com.mic.common.mq.MessageTypeEnum;
 import com.mic.common.mq.SendTypeEnum;
-import com.mic.common.dto.ProducerMessageDTO;
-import com.mic.common.service.RocketMqProducerService;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,9 +13,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
@@ -29,11 +25,9 @@ import java.util.Optional;
  **/
 @Aspect
 @Component
-public class MQProducerAspect implements ApplicationListener<ContextRefreshedEvent> {
+public class MQProducerAspect {
     @Autowired
-    private RocketMqProducerService rocketMqProducerService;
-
-    private TransactionHandler transactionHandler;
+    private GenericMessageHandler genericMessageHandler;
 
     @Pointcut(value = "@annotation(com.mic.common.annotation.MQProduce)")
     public void produce() {
@@ -51,28 +45,24 @@ public class MQProducerAspect implements ApplicationListener<ContextRefreshedEve
         dto.setSendType(annotation.send().getCode());
         //事务消息
         if (dto.getSendType().equals(SendTypeEnum.CONFIRM.getCode())) {
-            //1.预提交
-            ResponseVO responseVO = transactionHandler.prepare(dto);
+            //1.预提交(远程调用)
+            ResponseVO responseVO = genericMessageHandler.prepare(dto);
             if (!responseVO.isSuccess()) {
-                System.out.println("预提交失败");
                 throw new RuntimeException("预提交失败");
             }
             dto.setId(responseVO.getData());
             try {
                 result = joinPoint.proceed();
-                //TODO 需要对业务逻辑返回的结果进行校验
-                //2.提交消息（commit）
-                if (transactionHandler.commit(responseVO.getData())) {
-                    rocketMqProducerService.send(dto);
-                }
+                //2.提交消息（异步+远程调用）
+                genericMessageHandler.commit(dto);
             } catch (Exception e) {
-                transactionHandler.rollback(dto);
-                e.printStackTrace();
+                genericMessageHandler.rollback(dto);
+                throw new Exception(e);
             }
         } else {
             result = joinPoint.proceed();
-            //普通消息
-            rocketMqProducerService.send(dto);
+            //普通消息直接发送
+            genericMessageHandler.directSend(dto);
         }
         return result;
     }
@@ -100,42 +90,5 @@ public class MQProducerAspect implements ApplicationListener<ContextRefreshedEve
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         return method.getAnnotation(clazz);
-    }
-
-    @Override
-    public void onApplicationEvent(ContextRefreshedEvent event) {
-        ApplicationContext context = event.getApplicationContext();
-        this.transactionHandler = Optional.ofNullable(context.getBean(TransactionHandler.class)).orElse(new TransactionHandler() {
-            @Override
-            public ResponseVO prepare(ProducerMessageDTO dto) {
-                return null;
-            }
-
-            @Override
-            public boolean commit(Object identity) {
-                return false;
-            }
-
-            @Override
-            public void rollback(ProducerMessageDTO dto) {
-
-            }
-        });
-    }
-
-    public RocketMqProducerService getRocketMqProducerService() {
-        return rocketMqProducerService;
-    }
-
-    public void setRocketMqProducerService(RocketMqProducerService rocketMqProducerService) {
-        this.rocketMqProducerService = rocketMqProducerService;
-    }
-
-    public TransactionHandler getTransactionHandler() {
-        return transactionHandler;
-    }
-
-    public void setTransactionHandler(TransactionHandler transactionHandler) {
-        this.transactionHandler = transactionHandler;
     }
 }

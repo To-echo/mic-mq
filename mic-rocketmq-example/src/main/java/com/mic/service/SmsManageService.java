@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SmsManageService {
 
-    @MQProduce(group = ProducerGroupDict.TEST, type = MessageTypeEnum.USER_LOGIN, send = SendTypeEnum.CONFIRM)
+    @MQProduce(group = ProducerGroupDict.TEST, type = MessageTypeEnum.USER_LOGIN,
+            send = SendTypeEnum.CONFIRM)
     public void sendSms(ProducerMessageDTO dto) {
         throw new RuntimeException();
     }

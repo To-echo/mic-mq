@@ -1,11 +1,5 @@
 package com.mic.common.dto;
 
-import org.apache.rocketmq.common.message.Message;
-import org.apache.rocketmq.remoting.common.RemotingHelper;
-
-import java.io.UnsupportedEncodingException;
-import java.util.Random;
-
 /**
  * @author tianp
  **/
@@ -39,16 +33,6 @@ public class ProducerMessageDTO {
 
     public void setSendType(Integer sendType) {
         this.sendType = sendType;
-    }
-
-    public Message transferTo() throws UnsupportedEncodingException {
-        Random r = new Random();
-        Message message = new Message();
-        message.setBody(body.getBytes(RemotingHelper.DEFAULT_CHARSET));
-        message.setTags(this.tag);
-        message.setTopic(this.topic);
-        message.setKeys(this.pubKey);
-        return message;
     }
 
     public String getTopic() {
